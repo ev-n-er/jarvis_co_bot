@@ -66,20 +66,26 @@ func (server *BotServer) ListenAndServe() error {
 }
 
 func (server *BotServer) handleRequest(w http.ResponseWriter, req *http.Request) {
+	log.Printf("Got request %s", req.RequestURI)
 
 	var update message.Update
 
 	if err := json.NewDecoder(req.Body).Decode(&update); err != nil {
 		log.Fatal(err)
 		return
+	} else {
+		log.Print("JSON parsed")
 	}
 
 	if handler, ok := server.commandHandlers[update.Message.Text]; ok {
 		if msg, err := handler(&update); err != nil {
 			log.Fatal(err)
 		} else {
+			log.Printf("Using %s responder", update.Message.Text)
 			server.respond(msg)
 		}
+	} else {
+		log.Print("No suitable responder")
 	}
 
 }
