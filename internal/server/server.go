@@ -70,24 +70,27 @@ func (server *BotServer) handleRequest(w http.ResponseWriter, req *http.Request)
 
 	var update message.Update
 
-	if err := json.NewDecoder(req.Body).Decode(&update); err != nil {
-		log.Fatal(err)
-		return
-	} else {
+	if err := json.NewDecoder(req.Body).Decode(&update); err == nil {
 		log.Print("JSON parsed")
-	}
 
-	if handler, ok := server.commandHandlers[update.Message.Text]; ok {
-		if msg, err := handler(&update); err != nil {
-			log.Fatal(err)
+		if handler, ok := server.commandHandlers[update.Message.Text]; ok {
+			if msg, err := handler(&update); err != nil {
+				log.Fatal(err)
+			} else {
+				log.Printf("Using %s responder", update.Message.Text)
+				server.respond(msg)
+			}
 		} else {
-			log.Printf("Using %s responder", update.Message.Text)
-			server.respond(msg)
+			log.Print("No suitable responder")
 		}
-	} else {
-		log.Print("No suitable responder")
-	}
 
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	} else {
+		log.Printf("Failed to parse JSON: %s", err)
+		w.WriteHeader(http.StatusTeapot)
+		w.Write([]byte("I'm a teapot"))
+	}
 }
 
 func (server *BotServer) respond(m *message.Message) error {
