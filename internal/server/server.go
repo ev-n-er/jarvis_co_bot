@@ -59,7 +59,7 @@ func (server *BotServer) ListenAndServe() error {
 		log.Print("Webhook set, listening...")
 	}
 
-	http.HandleFunc("*", server.handleRequest)
+	http.HandleFunc("/", server.handleRequest)
 	http.ListenAndServe(server.port, nil)
 
 	return nil
