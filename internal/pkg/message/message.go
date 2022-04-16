@@ -7,7 +7,7 @@ type Update struct {
 
 type Message struct {
 	Text string `json:"text"`
-	User User   `json:"user"`
+	From User   `json:"from"`
 	Chat Chat   `json:"chat"`
 }
 

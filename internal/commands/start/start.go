@@ -9,10 +9,10 @@ import (
 func Handler(update *message.Update) (*message.Message, error) {
 	inMessage := (*update).Message
 	var text string
-	if inMessage.User.FirstName != "" {
-		text = inMessage.User.FirstName
+	if inMessage.From.FirstName != "" {
+		text = inMessage.From.FirstName
 	} else {
-		text = inMessage.User.Username
+		text = inMessage.From.Username
 	}
 
 	return &message.Message{
