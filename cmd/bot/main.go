@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -16,10 +17,10 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = ":8888"
+		port = "8888"
 	}
 
-	if botServer, err := server.CreateNew(port, apiKey, serverUrl); err != nil {
+	if botServer, err := server.CreateNew(fmt.Sprintf(":%s", port), apiKey, serverUrl); err != nil {
 		log.Fatal(err)
 	} else {
 		log.Printf("Starting listner at port %s", port)
