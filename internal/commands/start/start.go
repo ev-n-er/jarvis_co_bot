@@ -6,7 +6,7 @@ import (
 	"github.com/ev-n-er/jarvis_co_bot/internal/pkg/message"
 )
 
-func Handler(update *message.Update) (*message.Message, error) {
+func Handler(update *message.Update) (*message.ResponseMessage, error) {
 	inMessage := (*update).Message
 	var text string
 	if inMessage.From.FirstName != "" {
@@ -15,10 +15,8 @@ func Handler(update *message.Update) (*message.Message, error) {
 		text = inMessage.From.Username
 	}
 
-	return &message.Message{
-		Text: fmt.Sprintf("Hey %s", text),
-		Chat: message.Chat{
-			Id: inMessage.Chat.Id,
-		},
+	return &message.ResponseMessage{
+		Text:   fmt.Sprintf("Hey %s", text),
+		ChatId: inMessage.Chat.Id,
 	}, nil
 }

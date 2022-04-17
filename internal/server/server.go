@@ -14,7 +14,7 @@ import (
 	"github.com/ev-n-er/jarvis_co_bot/internal/pkg/message"
 )
 
-type CommandHandler func(*message.Update) (*message.Message, error)
+type CommandHandler func(*message.Update) (*message.ResponseMessage, error)
 
 type BotServer struct {
 	botUrl          string
@@ -71,7 +71,7 @@ func (server *BotServer) handleRequest(w http.ResponseWriter, req *http.Request)
 	var update message.Update
 
 	if err := json.NewDecoder(req.Body).Decode(&update); err == nil {
-		log.Print("JSON parsed")
+		log.Printf("JSON parsed: %#v", update)
 
 		if handler, ok := server.commandHandlers[update.Message.Text]; ok {
 			if msg, err := handler(&update); err != nil {
@@ -93,9 +93,12 @@ func (server *BotServer) handleRequest(w http.ResponseWriter, req *http.Request)
 	}
 }
 
-func (server *BotServer) respond(m *message.Message) error {
+func (server *BotServer) respond(m *message.ResponseMessage) error {
 
 	url := fmt.Sprintf("%ssendMessage", server.botUrl)
+
+	log.Printf("Will send: %#v to %s", *m, url)
+
 	body, err := json.Marshal(*m)
 	if err != nil {
 		return err
@@ -107,6 +110,13 @@ func (server *BotServer) respond(m *message.Message) error {
 	}
 
 	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(string(b))
 
 	return nil
 }

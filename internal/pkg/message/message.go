@@ -11,6 +11,11 @@ type Message struct {
 	Chat Chat   `json:"chat"`
 }
 
+type ResponseMessage struct {
+	Text   string `json:"text"`
+	ChatId int    `json:"chat_id"`
+}
+
 type User struct {
 	Id        int    `json:"id"`
 	FirstName string `json:"first_name"`
