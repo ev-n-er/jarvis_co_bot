@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/ev-n-er/jarvis_co_bot/internal/db"
 	"github.com/ev-n-er/jarvis_co_bot/internal/server"
 )
 
@@ -19,6 +20,8 @@ func main() {
 	if port == "" {
 		port = "8888"
 	}
+
+	db.Initialize()
 
 	if botServer, err := server.CreateNew(fmt.Sprintf(":%s", port), apiKey, serverUrl); err != nil {
 		log.Fatal(err)

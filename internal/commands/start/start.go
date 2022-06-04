@@ -16,7 +16,8 @@ func Handler(update *message.Update) (*message.ResponseMessage, error) {
 	}
 
 	return &message.ResponseMessage{
-		Text:   fmt.Sprintf("Hey %s", text),
-		ChatId: inMessage.Chat.Id,
+		Text:        fmt.Sprintf("Hey %s", text),
+		ChatId:      inMessage.Chat.Id,
+		ReplyMarkup: nil,
 	}, nil
 }

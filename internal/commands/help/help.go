@@ -9,5 +9,6 @@ func Handler(update *message.Update) (*message.ResponseMessage, error) {
 	return &message.ResponseMessage{
 		Text:   "I can assist with organizing coworking visits.",
 		ChatId: inMessage.Chat.Id,
+		ReplyMarkup: nil,
 	}, nil
 }
